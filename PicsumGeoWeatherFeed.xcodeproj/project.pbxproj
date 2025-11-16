@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7763A1232ECA2706001A0944 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 7763A1222ECA2706001A0944 /* GoogleMaps */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		7763A0F72ECA0267001A0944 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -29,9 +33,22 @@
 		7763A1002ECA0267001A0944 /* PicsumGeoWeatherFeedUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PicsumGeoWeatherFeedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7763A1252ECA30F9001A0944 /* Exceptions for "PicsumGeoWeatherFeed" folder in "PicsumGeoWeatherFeed" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 7763A0E32ECA0267001A0944 /* PicsumGeoWeatherFeed */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7763A0E62ECA0267001A0944 /* PicsumGeoWeatherFeed */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7763A1252ECA30F9001A0944 /* Exceptions for "PicsumGeoWeatherFeed" folder in "PicsumGeoWeatherFeed" target */,
+			);
 			path = PicsumGeoWeatherFeed;
 			sourceTree = "<group>";
 		};
@@ -52,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7763A1232ECA2706001A0944 /* GoogleMaps in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +130,7 @@
 			);
 			name = PicsumGeoWeatherFeed;
 			packageProductDependencies = (
+				7763A1222ECA2706001A0944 /* GoogleMaps */,
 			);
 			productName = PicsumGeoWeatherFeed;
 			productReference = 7763A0E42ECA0267001A0944 /* PicsumGeoWeatherFeed.app */;
@@ -195,6 +214,9 @@
 			);
 			mainGroup = 7763A0DB2ECA0267001A0944;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				7763A1212ECA2706001A0944 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7763A0E52ECA0267001A0944 /* Products */;
 			projectDirPath = "";
@@ -400,6 +422,7 @@
 				DEVELOPMENT_TEAM = 8KLUKAU6B7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PicsumGeoWeatherFeed/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -432,6 +455,7 @@
 				DEVELOPMENT_TEAM = 8KLUKAU6B7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PicsumGeoWeatherFeed/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -578,6 +602,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7763A1212ECA2706001A0944 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7763A1222ECA2706001A0944 /* GoogleMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7763A1212ECA2706001A0944 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7763A0DC2ECA0267001A0944 /* Project object */;
 }
