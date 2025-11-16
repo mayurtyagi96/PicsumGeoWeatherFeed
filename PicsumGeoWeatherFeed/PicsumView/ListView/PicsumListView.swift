@@ -8,26 +8,8 @@
 import SwiftUI
 import CoreData
 
-//struct PicsumListView: View {
-//    @StateObject private var viewModel = PicsumListViewModel()
-//
-//    var body: some View {
-//        NavigationView {
-//            List(viewModel.listData) { item in
-//                PicsumRowView(item: item)
-//                    .listRowSeparator(.hidden)
-//                    .padding(.vertical, 4)
-//            }
-//            .listStyle(.plain)
-//            .navigationTitle("Picsum Photos")
-//        }
-//        .task {
-//            await viewModel.getListData()
-//        }
-//    }
-//}
 struct PicsumGridView: View {
-    @StateObject private var viewModel = PicsumListViewModel()
+    @StateObject private var viewModel = PicsumViewModel()
 
     // Two flexible columns (responsive)
     private let columns = [

@@ -1,5 +1,5 @@
 //
-//  PicsumListViewModel.swift
+//  PicsumViewModel.swift
 //  PicsumGeoWeatherFeed
 //
 //  Created by Mayur on 16/11/25.
@@ -8,7 +8,7 @@ import SwiftUI
 import Combine
 
 @MainActor
-class PicsumListViewModel: ObservableObject {
+class PicsumViewModel: ObservableObject {
     @Published var listData: [PicsumModel] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
