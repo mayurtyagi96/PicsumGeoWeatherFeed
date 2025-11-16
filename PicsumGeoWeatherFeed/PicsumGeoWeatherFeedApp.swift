@@ -14,7 +14,7 @@ struct PicsumGeoWeatherFeedApp: App {
 
     var body: some Scene {
         WindowGroup {
-            PicsumListView()
+            PicsumGridView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

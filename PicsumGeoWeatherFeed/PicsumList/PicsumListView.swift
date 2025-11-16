@@ -8,20 +8,45 @@
 import SwiftUI
 import CoreData
 
-struct PicsumListView: View {
+//struct PicsumListView: View {
+//    @StateObject private var viewModel = PicsumListViewModel()
+//
+//    var body: some View {
+//        NavigationView {
+//            List(viewModel.listData) { item in
+//                PicsumRowView(item: item)
+//                    .listRowSeparator(.hidden)
+//                    .padding(.vertical, 4)
+//            }
+//            .listStyle(.plain)
+//            .navigationTitle("Picsum Photos")
+//        }
+//        .task {
+//            await viewModel.getListData()
+//        }
+//    }
+//}
+struct PicsumGridView: View {
     @StateObject private var viewModel = PicsumListViewModel()
 
-    var body: some View {
-        List(viewModel.listData) { item in
-            VStack(alignment: .leading) {
-                Text(item.author)
+    // Two flexible columns (responsive)
+    private let columns = [
+        GridItem(.flexible(), spacing: 12),
+        GridItem(.flexible(), spacing: 12)
+    ]
 
-                if let url = URL(string: "https://picsum.photos/200/300?image=\(item.id)") {
-                    CachedAsyncImage(url: url)
-                        .frame(height: 200)
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 16) {
+                    ForEach(viewModel.listData) { item in
+                        PicsumGridItemView(item: item)
+                    }
                 }
-                
+                .padding(.horizontal)
+                .padding(.top, 12)
             }
+            .navigationTitle("Picsum Grid")
         }
         .task {
             await viewModel.getListData()
@@ -29,9 +54,94 @@ struct PicsumListView: View {
     }
 }
 
+
+//struct PicsumRowView: View {
+//    let item: PicsumModel
+//    
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 12) {
+//            
+//            // IMAGE
+//            if let url = URL(string: "https://picsum.photos/500/300?image=\(item.id)") {
+//                CachedAsyncImage(url: url)
+//                    .frame(height: 200)
+//                    .clipShape(RoundedRectangle(cornerRadius: 16))
+//            }
+//            
+//            // TEXT INFO
+//            VStack(alignment: .leading, spacing: 6) {
+//                Text(item.author)
+//                    .font(.headline)
+//                
+//                HStack {
+//                    Label("\(item.width)x\(item.height)", systemImage: "photo")
+//                        .font(.caption)
+//                    Spacer()
+//                    Text(item.format.uppercased())
+//                        .font(.caption)
+//                        .padding(.horizontal, 8)
+//                        .padding(.vertical, 2)
+//                        .background(Color.blue.opacity(0.15))
+//                        .cornerRadius(6)
+//                }
+//                
+//                Text("File: \(item.filename)")
+//                    .font(.caption)
+//                    .foregroundColor(.secondary)
+//                
+//                // LINK TO POST
+////                if let url = URL(string: item.post_url) {
+////                    Link("View Source", destination: url)
+////                        .font(.caption)
+////                        .foregroundColor(.blue)
+////                }
+//            }
+//            .padding(.horizontal, 4)
+//
+//        }
+//        .padding()
+//        .background(
+//            RoundedRectangle(cornerRadius: 16)
+//                .fill(Color(.systemBackground))
+//                .shadow(color: .black.opacity(0.1), radius: 6)
+//        )
+//    }
+//}
+struct PicsumGridItemView: View {
+    let item: PicsumModel
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+
+            // Image
+            if let url = URL(string: "https://picsum.photos/400/300?image=\(item.id)") {
+                CachedAsyncImage(url: url)
+                    .frame(height: 150)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+            }
+
+            // Author
+            Text(item.author)
+                .font(.subheadline)
+                .fontWeight(.medium)
+
+            // Sizes
+            Text("\(item.width)x\(item.height)")
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding(8)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.systemBackground))
+                .shadow(color: .black.opacity(0.1), radius: 4)
+        )
+    }
+}
+
+
 struct CachedAsyncImage: View {
     let url: URL
-    
     @State private var uiImage: UIImage? = nil
     
     var body: some View {
@@ -39,29 +149,30 @@ struct CachedAsyncImage: View {
             if let uiImage {
                 Image(uiImage: uiImage)
                     .resizable()
-                    .scaledToFit()
+                    .scaledToFill()
+                    .clipped()
             } else {
-                ProgressView()
-                    .task {
-                        await loadImage()
-                    }
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.gray.opacity(0.15))
+                    ProgressView()
+                }
+                .task { await loadImage() }
             }
         }
     }
     
     private func loadImage() async {
-        // 1. Try cache
+        // 1. Cache first
         if let cached = ImageCacheManager.shared.image(for: url) {
             self.uiImage = cached
             return
         }
         
-        // 2. Download if not cached
-        
-        if let (data, image) = try? await APIService.shared.getImage(from: url){
+        // 2. Download
+        if let (data, image) = try? await APIService.shared.getImage(from: url) {
             ImageCacheManager.shared.save(data, for: url)
-                self.uiImage = image
+            self.uiImage = image
         }
-      
     }
 }
