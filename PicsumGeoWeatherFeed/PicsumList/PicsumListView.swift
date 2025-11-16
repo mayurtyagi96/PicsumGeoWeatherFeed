@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreData
 
-struct ContentView: View {
+struct PicsumListView: View {
 
     var body: some View {
         
@@ -16,5 +16,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    PicsumListView()
 }
