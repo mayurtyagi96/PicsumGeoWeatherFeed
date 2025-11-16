@@ -8,8 +8,10 @@
 import SwiftUI
 import CoreData
 
-struct PicsumGridView: View {
+struct PicsumView: View {
     @StateObject private var viewModel = PicsumViewModel()
+    @State private var showMapView: Bool = false
+    @State private var isLoading: Bool = true
 
     // Two flexible columns (responsive)
     private let columns = [
@@ -19,76 +21,47 @@ struct PicsumGridView: View {
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: 16) {
-                    ForEach(viewModel.listData) { item in
-                        PicsumGridItemView(item: item)
+            ZStack{
+                Group{
+                    if !showMapView{
+                        ScrollView {
+                            LazyVGrid(columns: columns, spacing: 16) {
+                                ForEach(viewModel.listData) { item in
+                                    PicsumGridItemView(item: item)
+                                }
+                            }
+                            .padding(.horizontal)
+                            .padding(.top, 12)
+                        }
+                    }else{
+                        PicsumMapView(items: viewModel.listData.map { MapImageMarker.fromPicsum(id: $0.id) })
                     }
                 }
-                .padding(.horizontal)
-                .padding(.top, 12)
+                
+//             Loader overlay on top of map
+                if isLoading {
+                    VStack {
+                        ProgressView("Loading data...")
+                            .padding(20)
+                            .background(.ultraThinMaterial)
+                            .cornerRadius(12)
+                    }
+                }
             }
-            .navigationTitle("Picsum Grid")
+            .toolbar{
+                Toggle("", isOn: $showMapView)
+                    .toggleStyle(ListMapToggleStyle())
+                    .labelsHidden()
+            }
+//            .navigationTitle("Picsum Grid")
         }
         .task {
             await viewModel.getListData()
+            isLoading = false
         }
     }
 }
 
-
-//struct PicsumRowView: View {
-//    let item: PicsumModel
-//    
-//    var body: some View {
-//        VStack(alignment: .leading, spacing: 12) {
-//            
-//            // IMAGE
-//            if let url = URL(string: "https://picsum.photos/500/300?image=\(item.id)") {
-//                CachedAsyncImage(url: url)
-//                    .frame(height: 200)
-//                    .clipShape(RoundedRectangle(cornerRadius: 16))
-//            }
-//            
-//            // TEXT INFO
-//            VStack(alignment: .leading, spacing: 6) {
-//                Text(item.author)
-//                    .font(.headline)
-//                
-//                HStack {
-//                    Label("\(item.width)x\(item.height)", systemImage: "photo")
-//                        .font(.caption)
-//                    Spacer()
-//                    Text(item.format.uppercased())
-//                        .font(.caption)
-//                        .padding(.horizontal, 8)
-//                        .padding(.vertical, 2)
-//                        .background(Color.blue.opacity(0.15))
-//                        .cornerRadius(6)
-//                }
-//                
-//                Text("File: \(item.filename)")
-//                    .font(.caption)
-//                    .foregroundColor(.secondary)
-//                
-//                // LINK TO POST
-////                if let url = URL(string: item.post_url) {
-////                    Link("View Source", destination: url)
-////                        .font(.caption)
-////                        .foregroundColor(.blue)
-////                }
-//            }
-//            .padding(.horizontal, 4)
-//
-//        }
-//        .padding()
-//        .background(
-//            RoundedRectangle(cornerRadius: 16)
-//                .fill(Color(.systemBackground))
-//                .shadow(color: .black.opacity(0.1), radius: 6)
-//        )
-//    }
-//}
 struct PicsumGridItemView: View {
     let item: PicsumModel
     
