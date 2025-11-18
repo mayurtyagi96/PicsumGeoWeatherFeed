@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7763A1232ECA2706001A0944 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 7763A1222ECA2706001A0944 /* GoogleMaps */; };
+		77AF6E332ECC1CFC000ABADB /* WeatherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77AF6E312ECC17E6000ABADB /* WeatherTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +32,7 @@
 		7763A0E42ECA0267001A0944 /* PicsumGeoWeatherFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PicsumGeoWeatherFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7763A0F62ECA0267001A0944 /* PicsumGeoWeatherFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PicsumGeoWeatherFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7763A1002ECA0267001A0944 /* PicsumGeoWeatherFeedUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PicsumGeoWeatherFeedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		77AF6E312ECC17E6000ABADB /* WeatherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -97,6 +99,7 @@
 				7763A0F92ECA0267001A0944 /* PicsumGeoWeatherFeedTests */,
 				7763A1032ECA0267001A0944 /* PicsumGeoWeatherFeedUITests */,
 				7763A0E52ECA0267001A0944 /* Products */,
+				77AF6E312ECC17E6000ABADB /* WeatherTests.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -265,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77AF6E332ECC1CFC000ABADB /* WeatherTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

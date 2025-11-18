@@ -87,6 +87,7 @@ struct PicsumGridItemView: View {
             if let url = URL(string: "\(APIEndpoint.imageBase)\(item.id)") {
                 CachedAsyncImage(url: url)
                     .frame(height: 150)
+                    .frame(maxWidth: .infinity)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
 
@@ -94,6 +95,7 @@ struct PicsumGridItemView: View {
             Text(item.author)
                 .font(.subheadline)
                 .fontWeight(.medium)
+                .lineLimit(1)
 
             // Sizes
             Text("\(item.width)x\(item.height)")
@@ -101,6 +103,7 @@ struct PicsumGridItemView: View {
                 .foregroundColor(.secondary)
         }
         .padding(8)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color(.systemBackground))
@@ -119,7 +122,7 @@ struct CachedAsyncImage: View {
             if let uiImage {
                 Image(uiImage: uiImage)
                     .resizable()
-                    .scaledToFill()
+                    .scaledToFit()
                     .clipped()
             } else {
                 ZStack {
