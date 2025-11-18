@@ -1,9 +1,3 @@
-//
-//  PicsumViewModel.swift
-//  PicsumGeoWeatherFeed
-//
-//  Created by Mayur on 16/11/25.
-//
 import SwiftUI
 import Combine
 
@@ -11,7 +5,7 @@ import Combine
 class PicsumViewModel: ObservableObject {
     @Published var listData: [PicsumModel] = []
     @Published var isLoading = false
-    @Published var errorMessage: String?
+    @Published var errorMessage: ErrorWrapper?
     
     func getListData() async {
         isLoading = true
@@ -20,7 +14,7 @@ class PicsumViewModel: ObservableObject {
         do {
             self.listData = try await APIService.shared.getPicsumListData()
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = ErrorWrapper(message: error.localizedDescription)
         }
         
         isLoading = false

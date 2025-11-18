@@ -8,10 +8,14 @@
 import SwiftUI
 import CoreData
 
+struct ErrorWrapper: Identifiable {
+    let id = UUID()
+    let message: String
+}
+
 struct PicsumView: View {
     @StateObject private var viewModel = PicsumViewModel()
     @State private var showMapView: Bool = false
-    @State private var isLoading: Bool = true
 
     // Two flexible columns (responsive)
     private let columns = [
@@ -33,13 +37,16 @@ struct PicsumView: View {
                             .padding(.horizontal)
                             .padding(.top, 12)
                         }
+                        .refreshable {
+                            await viewModel.getListData()
+                        }
                     }else{
                         PicsumMapView(items: viewModel.listData.map { MapImageMarker.fromPicsum(id: $0.id) })
                     }
                 }
                 
-//             Loader overlay on top of map
-                if isLoading {
+                // Loader overlay on top of map
+                if viewModel.isLoading {
                     VStack {
                         ProgressView("Loading data...")
                             .padding(20)
@@ -53,11 +60,19 @@ struct PicsumView: View {
                     .toggleStyle(ListMapToggleStyle())
                     .labelsHidden()
             }
-//            .navigationTitle("Picsum Grid")
+            // .navigationTitle("Picsum Grid")
+        }
+        .alert(item: $viewModel.errorMessage) { errorWrapper in
+            Alert(
+                title: Text("Error"),
+                message: Text(errorWrapper.message),
+                dismissButton: .default(Text("OK")) {
+                    viewModel.errorMessage = nil
+                }
+            )
         }
         .task {
             await viewModel.getListData()
-            isLoading = false
         }
     }
 }
@@ -119,4 +134,3 @@ struct CachedAsyncImage: View {
         }
     }
 }
-
