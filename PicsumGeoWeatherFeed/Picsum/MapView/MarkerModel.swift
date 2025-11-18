@@ -12,7 +12,6 @@ struct MapImageMarker: Identifiable {
     let lon: Double
 }
 
-
 extension MapImageMarker {
     static func fromPicsum(id: Int) -> MapImageMarker {
         // convert id to stable lat/lon
