@@ -21,7 +21,7 @@ extension MapImageMarker {
         
         return MapImageMarker(
             id: id,
-            thumbnailURL: "https://picsum.photos/100/100?image=\(id)",
+            thumbnailURL: "\(APIEndpoint.thumbnailBase)\(id)",  // Use the constant here
             lat: lat,
             lon: lon
         )

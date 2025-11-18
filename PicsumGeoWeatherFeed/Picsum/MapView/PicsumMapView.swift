@@ -25,10 +25,8 @@ struct PicsumMapView: View {
 }
 
 struct GoogleMapViewRepresentable: UIViewRepresentable {
-    let items: [MapImageMarker]   // <-- your parsed markers come here
+    let items: [MapImageMarker]
     @Binding var selectedMarker: MapImageMarker?
-    
-    
     
     // MARK: - Coordinator
     class Coordinator: NSObject, GMSMapViewDelegate {

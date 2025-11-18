@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WeatherModel: Codable {
+struct WeatherModel: Codable, Equatable {
     let latitude: Double
     let longitude: Double
     let generationtimeMS: Double
@@ -31,7 +31,7 @@ struct WeatherModel: Codable {
     }
 }
 
-struct CurrentUnits: Codable {
+struct CurrentUnits: Codable, Equatable {
     let time: String
     let interval: String
     let temperature2M: String
@@ -47,7 +47,7 @@ struct CurrentUnits: Codable {
     }
 }
 
-struct CurrentWeather: Codable {
+struct CurrentWeather: Codable, Equatable {
     let time: String
     let interval: Int
     let temperature2M: Double
@@ -62,3 +62,4 @@ struct CurrentWeather: Codable {
         case windSpeed10M = "wind_speed_10m"
     }
 }
+
