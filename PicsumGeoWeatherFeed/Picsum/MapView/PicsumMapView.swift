@@ -24,7 +24,6 @@ struct PicsumMapView: View {
     }
 }
 
-
 struct GoogleMapViewRepresentable: UIViewRepresentable {
     let items: [MapImageMarker]   // <-- your parsed markers come here
     @Binding var selectedMarker: MapImageMarker?
@@ -46,46 +45,41 @@ struct GoogleMapViewRepresentable: UIViewRepresentable {
             return true
         }
     }
-
+    
     func makeCoordinator() -> Coordinator {
         Coordinator(parent: self)
     }
     
-    
-    
-    
-
     func makeUIView(context: Context) -> GMSMapView {
         let mapView = GMSMapView()
         
-                if let first = items.first {
-                    let camera = GMSCameraPosition(
-                        latitude: first.lat,
-                        longitude: first.lon,
-                        zoom: 10
-                    )
-                    mapView.animate(to: camera)
-                }
-
+        if let first = items.first {
+            let camera = GMSCameraPosition(
+                latitude: first.lat,
+                longitude: first.lon,
+                zoom: 10
+            )
+            mapView.animate(to: camera)
+        }
+        
         mapView.delegate = context.coordinator
         
         addMarkers(to: mapView)
         return mapView
     }
-
+    
     func updateUIView(_ uiView: GMSMapView, context: Context) {
         uiView.clear()
         
         // Keep map zoom & center on first item
-                if let first = items.first {
-                    let camera = GMSCameraPosition(
-                        latitude: first.lat,
-                        longitude: first.lon,
-                        zoom: 10
-                    )
-                    uiView.animate(to: camera)
-                }
-
+        if let first = items.first {
+            let camera = GMSCameraPosition(
+                latitude: first.lat,
+                longitude: first.lon,
+                zoom: 10
+            )
+            uiView.animate(to: camera)
+        }
         
         addMarkers(to: uiView)
     }
@@ -100,32 +94,17 @@ struct GoogleMapViewRepresentable: UIViewRepresentable {
             // Load icon asynchronously
             Task {
                 if let url = URL(string: item.thumbnailURL),
-                   let image = await loadImage(url: url) {
-
+                   let image = await ImageLoader.loadImage(url: url) {
+                    
                     let resized = image.resized(to: CGSize(width: 40, height: 40))
                     let circular = resized.circularImage()
-
+                    
                     await MainActor.run {
                         marker.icon = circular
                     }
                 }
             }
-
+            
         }
-    }
-
-    private func loadImage(url: URL) async -> UIImage? {
-        // 1. Cache first
-        if let cached = ImageCacheManager.shared.image(for: url) {
-            return cached
-        }
-        
-        // 2. Download
-        if let (data, image) = try? await APIService.shared.getImage(from: url) {
-            ImageCacheManager.shared.save(data, for: url)
-            return image
-        }
-        return nil
     }
 }
-

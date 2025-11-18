@@ -112,22 +112,10 @@ struct CachedAsyncImage: View {
                         .fill(Color.gray.opacity(0.15))
                     ProgressView()
                 }
-                .task { await loadImage() }
+                .task {
+                    self.uiImage = await ImageLoader.loadImage(url: url)
+                }
             }
-        }
-    }
-    
-    private func loadImage() async {
-        // 1. Cache first
-        if let cached = ImageCacheManager.shared.image(for: url) {
-            self.uiImage = cached
-            return
-        }
-        
-        // 2. Download
-        if let (data, image) = try? await APIService.shared.getImage(from: url) {
-            ImageCacheManager.shared.save(data, for: url)
-            self.uiImage = image
         }
     }
 }

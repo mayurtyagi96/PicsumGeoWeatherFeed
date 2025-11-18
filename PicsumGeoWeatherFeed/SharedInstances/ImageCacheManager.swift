@@ -28,3 +28,16 @@ class ImageCacheManager {
         cache.storeCachedResponse(cachedData, for: URLRequest(url: url))
     }
 }
+
+enum ImageLoader {
+    static func loadImage(url: URL) async -> UIImage? {
+        if let cached = ImageCacheManager.shared.image(for: url) {
+            return cached
+        }
+        if let (data, image) = try? await APIService.shared.getImage(from: url) {
+            ImageCacheManager.shared.save(data, for: url)
+            return image
+        }
+        return nil
+    }
+}
