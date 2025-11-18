@@ -8,20 +8,18 @@ import SwiftUI
 import GoogleMaps
 
 struct PicsumMapView: View {
-    let items: [MapImageMarker]   // <-- your parsed markers come here
+    let items: [MapImageMarker]
+    @State private var selectedMarker: MapImageMarker? = nil
     
     var body: some View {
         ZStack{
             GoogleMapViewRepresentable(
-                items: items
+                items: items, selectedMarker: $selectedMarker
             )
             .edgesIgnoringSafeArea(.all)
-//            .task {
-//                await viewModel.getListData()
-//                withAnimation { isLoading = false }
-//                print(viewModel.listData.count)
-//            }
-        
+            .sheet(item: $selectedMarker){ item in
+                WeatherView(coordinates: CLLocationCoordinate2D(latitude: selectedMarker?.lat ?? 0, longitude: selectedMarker?.lon ?? 0), imageID: selectedMarker?.id)
+            }
         }
     }
 }
@@ -29,6 +27,33 @@ struct PicsumMapView: View {
 
 struct GoogleMapViewRepresentable: UIViewRepresentable {
     let items: [MapImageMarker]   // <-- your parsed markers come here
+    @Binding var selectedMarker: MapImageMarker?
+    
+    
+    
+    // MARK: - Coordinator
+    class Coordinator: NSObject, GMSMapViewDelegate {
+        let parent: GoogleMapViewRepresentable
+        
+        init(parent: GoogleMapViewRepresentable) {
+            self.parent = parent
+        }
+        
+        func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+            if let item = marker.userData as? MapImageMarker {
+                parent.selectedMarker = item
+            }
+            return true
+        }
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
+    
+    
+    
+    
 
     func makeUIView(context: Context) -> GMSMapView {
         let mapView = GMSMapView()
@@ -42,6 +67,7 @@ struct GoogleMapViewRepresentable: UIViewRepresentable {
                     mapView.animate(to: camera)
                 }
 
+        mapView.delegate = context.coordinator
         
         addMarkers(to: mapView)
         return mapView
@@ -103,49 +129,3 @@ struct GoogleMapViewRepresentable: UIViewRepresentable {
     }
 }
 
-
-
-struct MapImageMarker: Identifiable {
-    let id: Int
-    let thumbnailURL: String
-    let lat: Double
-    let lon: Double
-}
-
-
-extension MapImageMarker {
-    static func fromPicsum(id: Int) -> MapImageMarker {
-        // convert id to stable lat/lon
-        let lat = Double((id * 7 % 140) - 70)   // -70 to +70
-        let lon = Double((id * 13 % 360) - 180) // -180 to +180
-        
-        return MapImageMarker(
-            id: id,
-            thumbnailURL: "https://picsum.photos/100/100?image=\(id)",
-            lat: lat,
-            lon: lon
-        )
-    }
-}
-
-extension UIImage {
-
-    func resized(to size: CGSize) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { _ in
-            self.draw(in: CGRect(origin: .zero, size: size))
-        }
-    }
-
-    func circularImage() -> UIImage {
-        let minEdge = min(size.width, size.height)
-        let square = CGSize(width: minEdge, height: minEdge)
-        
-        let renderer = UIGraphicsImageRenderer(size: square)
-        return renderer.image { _ in
-            let path = UIBezierPath(ovalIn: CGRect(origin: .zero, size: square))
-            path.addClip()
-            self.draw(in: CGRect(origin: .zero, size: square))
-        }
-    }
-}

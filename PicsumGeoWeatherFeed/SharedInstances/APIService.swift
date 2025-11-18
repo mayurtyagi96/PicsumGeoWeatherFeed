@@ -44,4 +44,23 @@ class APIService {
         }
         return (Data(), UIImage())
     }
+    
+    
+    func getWeatherData(lat: Double, lon: Double) async throws -> WeatherModel?{
+        guard let url = URL(string:
+                                "https://api.open-meteo.com/v1/forecast?latitude=\(lat)&longitude=\(lon)&current=temperature_2m,relative_humidity_2m,wind_speed_10m"
+        ) else { return nil }
+        let request = URLRequest(url: url)
+        
+        do{
+            let (data, _) = try await session.data(for: request)
+            let parsedData: WeatherModel = try JSONDecoder().decode(WeatherModel.self, from: data)
+            return parsedData
+        }catch{
+            print(error)
+        }
+       
+        return nil
+    }
+
 }

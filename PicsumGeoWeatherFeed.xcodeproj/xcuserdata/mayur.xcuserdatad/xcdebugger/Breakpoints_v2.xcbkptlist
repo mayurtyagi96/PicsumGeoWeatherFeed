@@ -3,4 +3,52 @@
    uuid = "823E4A46-2857-46E8-A14F-180F8BC70619"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DEAA6395-2C97-41C5-94C1-9A18B2C17C2D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PicsumGeoWeatherFeed/APIService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "getWeatherData(lat:lon:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "DEAA6395-2C97-41C5-94C1-9A18B2C17C2D - 1abe61bbfcd9ee4d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for PicsumGeoWeatherFeed.APIService.getWeatherData(lat: Swift.Double, lon: Swift.Double) async throws -&gt; Swift.Optional&lt;PicsumGeoWeatherFeed.WeatherModel&gt;"
+                  moduleName = "PicsumGeoWeatherFeed.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mayur/Desktop/PicsumGeoWeatherFeed/PicsumGeoWeatherFeed/APIService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "60"
+                  endingLineNumber = "60">
+               </Location>
+               <Location
+                  uuid = "DEAA6395-2C97-41C5-94C1-9A18B2C17C2D - 9b270a25d1ca4842"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) suspend resume partial function for PicsumGeoWeatherFeed.APIService.getWeatherData(lat: Swift.Double, lon: Swift.Double) async throws -&gt; Swift.Optional&lt;PicsumGeoWeatherFeed.WeatherModel&gt;"
+                  moduleName = "PicsumGeoWeatherFeed.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mayur/Desktop/PicsumGeoWeatherFeed/PicsumGeoWeatherFeed/APIService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "60"
+                  endingLineNumber = "60">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
