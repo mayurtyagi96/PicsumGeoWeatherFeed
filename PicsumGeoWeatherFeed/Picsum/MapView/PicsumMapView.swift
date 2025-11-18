@@ -26,6 +26,7 @@ struct PicsumMapView: View {
                 coordinates: CLLocationCoordinate2D(latitude: item.lat, longitude: item.lon),
                 imageID: item.id
             )
+            .presentationDragIndicator(.visible)
         }
     }
 }
