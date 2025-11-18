@@ -69,7 +69,8 @@ struct PicsumView: View {
                     .toggleStyle(ListMapToggleStyle())
                     .labelsHidden()
             }
-            // .navigationTitle("Picsum Grid")
+             .navigationTitle("Picsum")
+             .navigationBarTitleDisplayMode(.inline)
         }
         .alert(item: $viewModel.errorMessage) { errorWrapper in
             Alert(
