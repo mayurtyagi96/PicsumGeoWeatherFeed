@@ -7,8 +7,6 @@
 import SwiftUI
 
 struct ListMapToggleStyle: ToggleStyle {
-    var listSelectedImage: String = "listSelectedSwitch"
-    var mapSelectedImage: String = "mapSelectedSwitch"
     @SwiftUI.State private var isAnimating = false
     
     func makeBody(configuration: Configuration) -> some View {
@@ -30,7 +28,7 @@ struct ListMapToggleStyle: ToggleStyle {
             Label {
                 configuration.label
             } icon: {
-                Image(configuration.isOn ? mapSelectedImage : listSelectedImage)
+                Image(configuration.isOn ? "mapSelectedSwitch" : "listSelectedSwitch")
             }
         }
         .buttonStyle(.plain)
