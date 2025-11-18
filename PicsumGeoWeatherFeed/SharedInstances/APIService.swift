@@ -8,6 +8,16 @@
 import Foundation
 import UIKit
 
+enum APIEndpoint {
+    static let picsumBaseURL = "https://picsum.photos"
+    static let picsumList = "\(picsumBaseURL)/list"
+    static let imageBase = "\(picsumBaseURL)/400/300?image="
+
+    static func weatherURL(lat: Double, lon: Double) -> String {
+        return "https://api.open-meteo.com/v1/forecast?latitude=\(lat)&longitude=\(lon)&current=temperature_2m,relative_humidity_2m,wind_speed_10m"
+    }
+}
+
 enum APIServiceError: Error, LocalizedError {
     case invalidURL
     case network(Error)
@@ -57,11 +67,11 @@ class APIService {
     // MARK: - Public APIs
 
     func getPicsumListData() async throws -> [PicsumModel] {
-        try await fetch([PicsumModel].self, from: "https://picsum.photos/list")
+        try await fetch([PicsumModel].self, from: APIEndpoint.picsumList)
     }
 
     func getWeatherData(lat: Double, lon: Double) async throws -> WeatherModel {
-        let urlString = "https://api.open-meteo.com/v1/forecast?latitude=\(lat)&longitude=\(lon)&current=temperature_2m,relative_humidity_2m,wind_speed_10m"
+        let urlString = APIEndpoint.weatherURL(lat: lat, lon: lon)
         return try await fetch(WeatherModel.self, from: urlString)
     }
 
@@ -77,3 +87,4 @@ class APIService {
         }
     }
 }
+

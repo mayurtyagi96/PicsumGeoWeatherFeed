@@ -69,7 +69,7 @@ struct PicsumGridItemView: View {
         VStack(alignment: .leading, spacing: 8) {
 
             // Image
-            if let url = URL(string: "https://picsum.photos/400/300?image=\(item.id)") {
+            if let url = URL(string: "\(APIEndpoint.imageBase)\(item.id)") {
                 CachedAsyncImage(url: url)
                     .frame(height: 150)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
@@ -119,3 +119,4 @@ struct CachedAsyncImage: View {
         }
     }
 }
+

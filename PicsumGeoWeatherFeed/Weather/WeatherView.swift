@@ -15,7 +15,7 @@ struct WeatherView: View {
 
     var body: some View {
         VStack {
-            if let url = URL(string: "https://picsum.photos/400/300?image=\(imageID ?? 0)") {
+            if let url = URL(string: "\(APIEndpoint.imageBase)\(imageID ?? 0)") {
                 CachedAsyncImage(url: url)
                     .frame(height: 150)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
