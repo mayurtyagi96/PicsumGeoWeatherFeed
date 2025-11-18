@@ -4,6 +4,7 @@
 //
 //  Created by Mayur on 17/11/25.
 //
+
 import SwiftUI
 import CoreLocation
 
@@ -13,23 +14,35 @@ struct WeatherView: View {
     let imageID: Int?
 
     var body: some View {
-        VStack(spacing: 20) {
-            if let url = URL(string: "\(APIEndpoint.imageBase)\(imageID ?? 0)") {
-                CachedAsyncImage(url: url)
-                    .frame(height: 150)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .padding(.top, 12)
-            }
+        OrientationReader { isLandscape in
+            ScrollView {
+                VStack(spacing: 20) {
 
-            if let weather = viewModel.weather {
-                WeatherDetailCard(weather: weather)
-                    .transition(.opacity)
-            } else {
-                WeatherSkeletonCard()
-                    .transition(.opacity)
+                    // MARK: - Image
+                    if let url = URL(string: "\(APIEndpoint.imageBase)\(imageID ?? 0)") {
+                        CachedAsyncImage(url: url)
+                            .frame(
+                                height: isLandscape ? 120 : 150
+                            )
+                            .frame(
+                                maxWidth: isLandscape ? 240 : .infinity
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .padding(.top, 12)
+                    }
+
+                    // MARK: - Weather Content
+                    if let weather = viewModel.weather {
+                        WeatherDetailCard(weather: weather, isLandscape: isLandscape)
+                            .transition(.opacity)
+                    } else {
+                        WeatherSkeletonCard(isLandscape: isLandscape)
+                            .transition(.opacity)
+                    }
+                }
+                .padding()
             }
         }
-        .padding()
         .task {
             await viewModel.fetchWeather(lat: coordinates.latitude, lon: coordinates.longitude)
         }
@@ -37,23 +50,40 @@ struct WeatherView: View {
     }
 }
 
-// MARK: - Weather Data Card
 
+// MARK: - Orientation Reader Helper
+struct OrientationReader<Content: View>: View {
+    @ViewBuilder var content: (Bool) -> Content   // true = landscape
+
+    var body: some View {
+        GeometryReader { geo in
+            let isLandscape = geo.size.width > geo.size.height
+            content(isLandscape)
+        }
+    }
+}
+
+
+// MARK: - Weather Data Card
 private struct WeatherDetailCard: View {
     let weather: WeatherModel
+    var isLandscape: Bool
 
     var body: some View {
         VStack(spacing: 18) {
+
             Text(weather.timezone)
                 .font(.title)
                 .bold()
+
             Text(weather.timezoneAbbreviation)
                 .font(.headline)
                 .foregroundColor(.secondary)
 
             Divider().padding(.horizontal)
 
-            HStack(spacing: 40) {
+            // Landscape spacing is tighter
+            HStack(spacing: isLandscape ? 20 : 40) {
                 WeatherMetricView(
                     value: "\(Int(weather.current.temperature2M))º",
                     label: "Temperature",
@@ -70,10 +100,14 @@ private struct WeatherDetailCard: View {
                     color: .orange
                 )
             }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, isLandscape ? 6 : 0)
+
             VStack(spacing: 2) {
                 Text("Elevation: \(Int(weather.elevation)) m")
                     .font(.footnote)
                     .foregroundColor(.secondary)
+
                 Text("Updated: \(formattedDate(weather.current.time))")
                     .font(.footnote)
                     .foregroundColor(.secondary)
@@ -102,6 +136,8 @@ private struct WeatherDetailCard: View {
     }
 }
 
+
+// MARK: - Weather Metric UI
 private struct WeatherMetricView: View {
     let value: String
     let label: String
@@ -112,6 +148,7 @@ private struct WeatherMetricView: View {
             Text(value)
                 .font(.system(size: 32, weight: .bold))
                 .foregroundColor(color)
+
             Text(label)
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -119,15 +156,20 @@ private struct WeatherMetricView: View {
     }
 }
 
-// MARK: - Skeleton Loading Shimmer
 
+// MARK: - Skeleton Loader (Landscape Optimized)
 private struct WeatherSkeletonCard: View {
+    var isLandscape: Bool
+
     var body: some View {
         VStack(spacing: 18) {
+
             ShimmerBar(width: 180, height: 28)
             ShimmerBar(width: 90, height: 22)
+
             Divider().padding(.horizontal)
-            HStack(spacing: 40) {
+
+            HStack(spacing: isLandscape ? 18 : 40) {
                 ForEach(0..<3) { _ in
                     VStack {
                         ShimmerBar(width: 44, height: 32)
@@ -135,6 +177,7 @@ private struct WeatherSkeletonCard: View {
                     }
                 }
             }
+
             VStack(spacing: 2) {
                 ShimmerBar(width: 110, height: 12)
                 ShimmerBar(width: 180, height: 12)
@@ -151,7 +194,8 @@ private struct WeatherSkeletonCard: View {
     }
 }
 
-/// Simple shimmer bar for skeleton loading
+
+// MARK: - Shimmer Bar
 private struct ShimmerBar: View {
     let width: CGFloat
     let height: CGFloat
@@ -161,6 +205,7 @@ private struct ShimmerBar: View {
         ZStack {
             RoundedRectangle(cornerRadius: height / 2)
                 .fill(Color.gray.opacity(0.18))
+
             RoundedRectangle(cornerRadius: height / 2)
                 .fill(
                     LinearGradient(
@@ -189,3 +234,4 @@ private struct ShimmerBar: View {
         .onAppear { isAnimating = true }
     }
 }
+
