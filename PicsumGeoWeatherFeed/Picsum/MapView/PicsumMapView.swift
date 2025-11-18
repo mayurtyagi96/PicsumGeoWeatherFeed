@@ -72,14 +72,12 @@ struct GoogleMapViewRepresentable: UIViewRepresentable {
         let mapView = GMSMapView()
         mapView.delegate = context.coordinator
         
-        // Center camera on first item
-        if let first = items.first {
-            mapView.camera = GMSCameraPosition(
-                latitude: first.lat,
-                longitude: first.lon,
-                zoom: 10
-            )
-        }
+        // Center camera on India
+        mapView.camera = GMSCameraPosition(
+            latitude: 20.5937,
+            longitude: 78.9629,
+            zoom: 4
+        )
         
         // Load markers for initial visible bounds
         DispatchQueue.main.async {
@@ -88,6 +86,7 @@ struct GoogleMapViewRepresentable: UIViewRepresentable {
         
         return mapView
     }
+
     
     
     
